@@ -39,7 +39,7 @@ public class GestorSala {
   // El ejercicio no especifica ciertas cosas con la temperatura, aquí está lo que yo asumí.
   // Nota: Ciclos: Ocurren cada vez que sale una Persona del museo. Al llegar a x ciclos, se checkea la temperatura.
   //      Checkeo: Por cada checkeo, la temperatura sube un punto y se la observa. Cuando se llega al umbral máximo, se reduce la capacidad del 
-  //               museo. Luego de reducir la capacidad, la temperatura se reinicia y en el siguiente checkeo, se reestrablece la cap. anterior.
+  //               museo.
      
     // Métodos de Persona.
     public synchronized void entrarSala() throws InterruptedException{
