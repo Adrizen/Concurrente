@@ -8,9 +8,9 @@ package TP6MecanismosSincronizacion.Ejercicio8.Locks;
 public class test {
 
     public static void main(String[] args) {
-        CentroHemoterapia centro = new CentroHemoterapia(1,1); // (numCamillas, numRevistas)
+        CentroHemoterapia centro = new CentroHemoterapia(2,0); // (numCamillas, numRevistas)
         
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             new Thread(new Donante("Donante"+i,centro)).start();
         }
         

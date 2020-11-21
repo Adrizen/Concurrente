@@ -12,12 +12,12 @@ import static Colores.Colores.*;
  */
 public class CentroHemoterapia {
     private ReentrantLock lock;
-    private int camillasActuales;
-    private int revistasActuales;
+    private int camillasActuales;   // Cantidad de camillas en un determinado momento. Al inicio de la ejecición están todas disponibles
+    private int revistasActuales;   // Cantidad de revistas en un determinado momento. Al inicio de la ejecición están todas disponibles.
     
-    private Condition avisarDonantes;
+    private Condition avisarDonantes;   // Condición para avisarle a los donantes si se libera una revista o una camilla.
     
-    private int turnoActual = 1;
+    private int turnoActual = 1;    // El n° de turno actual. El Donante con este número puede ser atendido.
     private int turnoSiguiente = 1;
     
     public CentroHemoterapia(int numCamillas, int numRevistas){
@@ -33,7 +33,7 @@ public class CentroHemoterapia {
         boolean tieneRevista = false;
         int miTurno = turnoSiguiente;
         turnoSiguiente++;   // El siguiente Donante tendrá un n° de ticket más alto.
-        while (miTurno != turnoActual && camillasActuales <= 0) {
+        while (miTurno != turnoActual || camillasActuales <= 0) { // Si no me toca y no hay camillas espero.
             if (revistasActuales > 0 && !tieneRevista) {
                 revistasActuales--;
                 tieneRevista = true;
@@ -51,6 +51,7 @@ public class CentroHemoterapia {
             revistasActuales++; // Devuelve la revista que había tomado mientras esperaba.
             avisarDonantes.signalAll();
         }
+        turnoActual++;
         System.out.println(GREEN_BOLD + nombreDonante + " consigue una camilla y se prepara para donar sangre." + RESET);
         lock.unlock();   
     }
@@ -59,7 +60,6 @@ public class CentroHemoterapia {
         lock.lock();
         System.out.println(nombreDonante + " deja la camilla y sale del centro de hemoterapia.");
         camillasActuales++;
-        turnoActual++;
         avisarDonantes.signalAll();
         lock.unlock();
     }
