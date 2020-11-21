@@ -3,6 +3,8 @@ package TP6MecanismosSincronizacion.Ejercicio8.Locks;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
+import static Colores.Colores.*;
+
 
 /**
  *
@@ -12,8 +14,11 @@ public class CentroHemoterapia {
     private ReentrantLock lock;
     private int camillasActuales;
     private int revistasActuales;
+    
     private Condition avisarDonantes;
     
+    private int turnoActual = 1;
+    private int turnoSiguiente = 1;
     
     public CentroHemoterapia(int numCamillas, int numRevistas){
         lock = new ReentrantLock();
@@ -24,14 +29,19 @@ public class CentroHemoterapia {
     
     public void entrarDonante(String nombreDonante) throws InterruptedException{
         lock.lock();
+        System.out.println(YELLOW_BOLD + nombreDonante + " entra a la clínica." + RESET);
         boolean tieneRevista = false;
-        while (camillasActuales <= 0){
-            if (revistasActuales > 0){
+        int miTurno = turnoSiguiente;
+        turnoSiguiente++;   // El siguiente Donante tendrá un n° de ticket más alto.
+        while (miTurno != turnoActual && camillasActuales <= 0) {
+            if (revistasActuales > 0 && !tieneRevista) {
                 revistasActuales--;
                 tieneRevista = true;
                 System.out.println(nombreDonante + " toma una revista y espera.");
             } else {
-                System.out.println(nombreDonante + " no pudo conseguir una revista, mira la tele y espera.");
+                if (!tieneRevista) {
+                    System.out.println(nombreDonante + " no pudo conseguir una revista, mira la tele y espera.");
+                }
             }
             avisarDonantes.await();
         }
@@ -39,9 +49,9 @@ public class CentroHemoterapia {
         if (tieneRevista){
             System.out.println(nombreDonante + " devuelve la revista que había tomado");
             revistasActuales++; // Devuelve la revista que había tomado mientras esperaba.
-            avisarDonantes.signal();
+            avisarDonantes.signalAll();
         }
-        System.out.println(nombreDonante + " consigue una camilla y se prepara para donar sangre.");
+        System.out.println(GREEN_BOLD + nombreDonante + " consigue una camilla y se prepara para donar sangre." + RESET);
         lock.unlock();   
     }
     
@@ -49,7 +59,8 @@ public class CentroHemoterapia {
         lock.lock();
         System.out.println(nombreDonante + " deja la camilla y sale del centro de hemoterapia.");
         camillasActuales++;
-        avisarDonantes.signal();
+        turnoActual++;
+        avisarDonantes.signalAll();
         lock.unlock();
     }
     
