@@ -8,17 +8,26 @@ package TP6MecanismosSincronizacion.Ejercicio6;
 public class test {
 
     public static void main(String[] args) {
-        Observatorio observatorio = new Observatorio(4,4,2,-1);
+        Observatorio observatorio = new Observatorio(4,4,5,2); // (maximoCapacidad,maximoInvestigaciones,maximoVisitas,maximoMantenimientos)
         
-        
-     for (int i = 0; i < 2; i++) {
-            new Thread(new Visitante("Visitante"+i,observatorio,"null")).start();
+        // Visitantes sin silla de ruedas.
+        for (int i = 0; i < 3; i++) {
+            new Thread(new Visitante("Visitante" + i, observatorio, "")).start();
         }
-        
+
+        // Visitantes con sillas de rueda.
         for (int i = 0; i < 2; i++) {
-            new Thread(new Investigador("Investigador"+i,observatorio)).start();
+            new Thread(new Visitante("Visitante" + i, observatorio, "sillaDeRuedas")).start();
         }
         
+        // Investigadores.
+        for (int i = 0; i < 5; i++) {
+            new Thread(new Investigador("Investigador" + i, observatorio)).start();
+        }
+
+        for (int i = 0; i < 5; i++) {
+            new Thread(new Mantenimiento("Mantenimiento" + i, observatorio)).start();
+        }
         
     }
     

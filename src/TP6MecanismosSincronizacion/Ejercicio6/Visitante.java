@@ -20,7 +20,7 @@ public class Visitante extends Persona{
             try {
                 observatorio.entrarVisitante(nombre,tipo);
                 observatorio.estudiarEstrellas(nombre);
-                observatorio.salirVisitante(nombre);
+                observatorio.salirVisitante(nombre,tipo);
             } catch (InterruptedException e) { }
             
         }

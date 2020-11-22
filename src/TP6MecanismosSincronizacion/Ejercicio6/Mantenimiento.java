@@ -14,7 +14,11 @@ public class Mantenimiento extends Persona{
     @Override
     public void run() {
         while (true) {
-
+            try{
+                observatorio.entrarMantenimiento(nombre);
+                observatorio.asearMuseo(nombre);
+                observatorio.salirMantenimiento(nombre);
+            } catch(InterruptedException e) { }
         }
     }
 
