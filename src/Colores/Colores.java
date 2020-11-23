@@ -5,6 +5,8 @@ package Colores;
  *
  * @author Guillermo Andrés Pereyra.
  * From: https://stackoverflow.com/questions/5762491/how-to-print-color-in-console-using-system-out-println
+ * Usar "import static Colores.Colores.*" en la clase a utilizar, luego concatenar al principio del print el nombre del color elegido. Al final del print poner "RESET".
+ * Se pueden utilizar varios colores en un mismo print, siempre que antes de usar otro color se use "RESET".
  */
 public class Colores {
     // Reset
